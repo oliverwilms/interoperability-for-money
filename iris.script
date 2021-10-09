@@ -3,7 +3,7 @@ do $SYSTEM.OBJ.Load("/opt/irisapp/Installer.cls", "ck")
 
  zn "IRISAPP"
  do $System.OBJ.LoadDir("/opt/irisapp/src","ck",,1)
- zpm "install sslclient"
+ zpm "install production-manager"
 
  zn "%SYS"
  Do ##class(Security.Users).UnExpireUserPasswords("*")
