@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Export generator="Cache" version="25">
-  <Document name="interoperability-sample.ZPM">
+  <Document name="interoperability-for-money.ZPM">
     <Module>
-      <Name>interoperability-sample</Name>
-      <Description>A simple IRIS interoperability application - reads data from Reddit and filter it.</Description>
-      <Version>0.0.3</Version>
+      <Name>interoperability-for-money</Name>
+      <Description>A simple IRIS interoperability application</Description>
+      <Version>0.0.1</Version>
       <Packaging>module</Packaging>
       <Dependencies>
         <ModuleReference>
