@@ -8,8 +8,8 @@
       <Packaging>module</Packaging>
       <Dependencies>
         <ModuleReference>
-          <Name>sslclient</Name>
-          <Version>1.0.1</Version>
+          <Name>production-manager</Name>
+          <Version>1.0.7</Version>
         </ModuleReference>
       </Dependencies>
       <SourcesRoot>src</SourcesRoot>
@@ -18,6 +18,18 @@
       <Resource Name="dc.Reddit.PKG"/>
       <Resource Name="dc.Demo.PKG"/>
       <SystemRequirements Version=">=2020.1" Interoperability="enabled" />
+      <Default Name="dbrole" Value="%DB_IRISAPP" /> 
+      <CSPApplication 
+        Url="/production"
+        Recurse="1"
+        MatchRoles=":{$dbrole}"
+        PasswordAuthEnabled="1"
+        UnauthenticatedEnabled="0"
+        DispatchClass="RestProduction.REST"
+        ServeFiles="1"
+        CookiePath="/production"
+        UseCookies="2"
+      />
     </Module>
   </Document>
 </Export>
