@@ -195,90 +195,31 @@ ClassMethod GetPass(pIris As %String) As %String
 	Quit tPass
 }
 
-ClassMethod MakeData(ByRef pData As %Library.GlobalCharacterStream) As %Status
+ClassMethod MakeRecordMap() As %Status
 {
-	Set comma = ","
-	Set tSC = $$$OK
-	Set pData = ##class(%Library.GlobalCharacterStream).%New()
-	Set tSC = pData.WriteLine("{")
-	Set tSC = pData.WriteLine(..MakeQLineText("description","new demo production")_comma)
-	Set tSC = pData.WriteLine(..MakeQLineNumber("actor_pool_size",2)_comma)
-	Set tSC = pData.WriteLine(..MakeQLineNumber("log_general_trace_events",1)_comma)
-	Set tSC = pData.WriteLine(..MakeQLineNumber("testing_enabled",1)_comma)
-	Set tSC = pData.WriteLine(..MakeQArrayOpen("settings"))
-	Set tSC = pData.WriteLine("{")
-	Set tSC = pData.WriteLine(..MakeQLineText("name","ShutdownTimeout")_comma)
-	Set tSC = pData.WriteLine(..MakeQLineText("target","Adapter")_comma)
-	Set tSC = pData.WriteLine(..MakeQLineText("value","180"))
-	Set tSC = pData.WriteLine("}]}")
-	Quit tSC
-}
-
-ClassMethod MakeQArrayOpen(pName As %String = "") As %String
-{
-	Set pReturn = ""
-	Set quote = """"
-	Set qName = quote _ pName _ quote
-	Set sep = ": "
-	Set pReturn = qName _ sep _ "["
-	Quit pReturn
-}
-
-ClassMethod MakeQLineNumber(pName As %String = "", pValue As %String = "") As %String
-{
-	Set pReturn = ""
-	Set quote = """"
-	Set qName = quote _ pName _ quote
-	Set sep = ": "
-	Set pReturn = qName _ sep _ pValue
-	Quit pReturn
-}
-
-ClassMethod MakeQLineText(pName As %String = "", pValue As %String = "") As %String
-{
-	Set pReturn = ""
-	Set quote = """"
-	Set qName = quote _ pName _ quote
-	Set qValue = quote _ pValue _ quote
-	Set sep = ": "
-	Set pReturn = qName _ sep _ qValue
-	Quit pReturn
+	Set pDEBUG = 1
+	Do:pDEBUG ..DebugTEST("Oliver.Util - MakeRecordMap")
+	Set tDataDir = ##class(Oliver.Production.Config).#DataDir
+	Do:pDEBUG ..DebugTEST("tDataDir = "_tDataDir)
+	Set tFilename = "export.CSV"
+	Do:pDEBUG ..DebugTEST("tFilename = "_tFilename)
+	Set x = "/"
+	Set tDataFile = tDataDir _ x _ tFilename
+	Do:pDEBUG ..DebugTEST("tDataFile = "_tDataFile)
+	Set tRecordMap = ##class(Oliver.Production.Config).#RecordMap
+	Set tReturn = ##class(Oliver.CSVRecordWizard).Test(tDataFile,tRecordMap)
+	Do:pDEBUG ..DebugTEST("tReturn = "_tReturn)
+	//Do:pDEBUG ..DebugStatus(tSC)
+	Quit $Get(tSC,$$$OK)
 }
 
 ClassMethod Test() As %Status
 {
 	Kill ^TESTunit
-	Set tSC = $$$OK
-	Set pDEBUG = 1
-	Set pIris = "127.0.0.1:52773"
-	Set pURL = "/production/productions"
-	Set tSC = ..CallRESTapi(pIris,pURL,.obj)
-	Set tProduction = "Oliver.Money.Production"
-	Set pURL = "/production/status/"_tProduction
-	Set tSC = ..CallRESTapi(pIris,pURL,.obj)
-	If $$$ISERR(tSC) Do:pDEBUG ..DebugStatus(tSC)
-	If $$$ISOK(tSC) {
-		Try {
-			Set pType = obj.type
-			Set pMessage = obj.message
-		}
-		Catch {
-			Set tSC = $$$ERROR($$$GeneralError,"JSON error")
-			Do:pDEBUG ..DebugStatus(tSC)
-		}
-	}
-	Try {
-		Do:pDEBUG ..DebugTEST("pType = "_pType)
-		Do:pDEBUG ..DebugTEST("pMessage = "_pMessage)
-
-
-	} Catch { }
-	If ($Get(pType) = "error"),($Get(pMessage) [ "Production not found") {
-		Set pType = "POST"
-		Set pURL = "/production/productions/"_tProduction
-		Set tSC = ..MakeData(.pStream)
-		Set tSC = ..CallRESTapi(pIris,pURL,.obj,pType,pStream)
-	}
+	Set tSC = ..MakeRecordMap()
+	Set tExists = ##class(Oliver.Production.Config).Exists()
+	//If tExists Quit $$$OK
+	Set tSC = ##class(Oliver.Production.Config).CreateMoney()
 	Quit tSC
 }
 
