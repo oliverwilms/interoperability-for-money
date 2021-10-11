@@ -78,11 +78,11 @@ ClassMethod GetItemSettings(pItem As %String = "") As %Status
 	Quit tSC
 }
 
-ClassMethod MakeData(ByRef pData As %Library.GlobalCharacterStream) As %Status
+ClassMethod MakeData(ByRef pData As %Stream.FileCharacter) As %Status
 {
 	Set comma = ","
 	Set tSC = $$$OK
-	Set pData = ##class(%Library.GlobalCharacterStream).%New()
+	Set pData = ##class(%Stream.FileCharacter).%New()
 	Set tSC = pData.WriteLine("{")
 	Set tSC = pData.WriteLine(..MakeQLineText("description","new demo production")_comma)
 	Set tSC = pData.WriteLine(..MakeQLineNumber("actor_pool_size",2)_comma)
@@ -97,11 +97,11 @@ ClassMethod MakeData(ByRef pData As %Library.GlobalCharacterStream) As %Status
 	Quit tSC
 }
 
-ClassMethod MakeDataAddService(ByRef pData As %Library.GlobalCharacterStream) As %Status
+ClassMethod MakeDataAddService(ByRef pData As %Stream.FileCharacter) As %Status
 {
 	Set comma = ","
 	Set tSC = $$$OK
-	Set pData = ##class(%Library.GlobalCharacterStream).%New()
+	Set pData = ##class(%Stream.FileCharacter).%New()
 	Set tSC = pData.WriteLine("{")
 	Set tSC = pData.WriteLine(..MakeQLineNumber("enabled",1)_comma)
 	Set tSC = pData.WriteLine(..MakeQLineNumber("pool_size",1)_comma)
@@ -110,11 +110,11 @@ ClassMethod MakeDataAddService(ByRef pData As %Library.GlobalCharacterStream) As
 	Quit tSC
 }
 
-ClassMethod MakeDataPutService(ByRef pData As %Library.GlobalCharacterStream) As %Status
+ClassMethod MakeDataPutService(ByRef pData As %Stream.FileCharacter) As %Status
 {
 	Set comma = ","
 	Set tSC = $$$OK
-	Set pData = ##class(%Library.GlobalCharacterStream).%New()
+	Set pData = ##class(%Stream.FileCharacter).%New()
 	Set tSC = pData.WriteLine("{")
 	Set tSC = pData.WriteLine(..MakeQLineNumber("enabled",1)_comma)
 	Set tSC = pData.WriteLine(..MakeQLineNumber("pool_size",1)_comma)
@@ -123,7 +123,7 @@ ClassMethod MakeDataPutService(ByRef pData As %Library.GlobalCharacterStream) As
 
 	Set comma = ","
 	Set tSC = $$$OK
-	Set pData = ##class(%Library.GlobalCharacterStream).%New()
+	Set pData = ##class(%Stream.FileCharacter).%New()
 	Set tSC = pData.WriteLine("{")
 	Set tSC = pData.WriteLine(..MakeQLineNumber("pool_size",2)_comma)
 	Set tSC = pData.WriteLine(..MakeQLineNumber("log_trace_events",1)_comma)
