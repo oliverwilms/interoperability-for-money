@@ -54,15 +54,7 @@ ClassMethod DetectRecTerm(pFilename As %String) As %String
 }
 
 /// Quoted header records did not process before code change on 10/3/2021 - OTW 
-ClassMethod ProcessCSVFile(
-	pFilename As %String,
-	pRecordMapName As %String,
-	pSep As %String = ",",
-	pQuoteChar As %String = """",
-	pHasHeaderRow As %Boolean = 0,
-	pRecTerm As %String = "\x0d\x0a",
-	pCharEncoding As %String = "UTF-8",
-	pKeepSQLCols As %Boolean = 1) As %String [ Internal, ZenMethod ]
+ClassMethod ProcessCSVFile(pFilename As %String, pRecordMapName As %String, pSep As %String = ",", pQuoteChar As %String = """", pHasHeaderRow As %Boolean = 0, pRecTerm As %String = "\x0d\x0a", pCharEncoding As %String = "UTF-8", pKeepSQLCols As %Boolean = 1) As %String [ Internal, ZenMethod ]
 {
 	New %recTerm,%sep,%quoteChar
 	Try {
@@ -175,15 +167,7 @@ ClassMethod ProcessCSVFile(
 }
 
 /// pHasHeaderRow defaults to 1 - Oliver Wilms
-ClassMethod Test(
-	pFilename As %String,
-	pRecordMapName As %String,
-	pSep As %String = ",",
-	pQuoteChar As %String = """",
-	pHasHeaderRow As %Boolean = 1,
-	pRecTerm As %String = "\x0d\x0a",
-	pCharEncoding As %String = "UTF-8",
-	pKeepSQLCols As %Boolean = 1) As %Status
+ClassMethod Test(pFilename As %String, pRecordMapName As %String, pSep As %String = ",", pQuoteChar As %String = """", pHasHeaderRow As %Boolean = 1, pRecTerm As %String = "\x0d\x0a", pCharEncoding As %String = "UTF-8", pKeepSQLCols As %Boolean = 1) As %String
 {
 	If ($Get(pFilename) = "") Set pFilename = "/opt/irisapp/iris-for-money-25-Sep-2021 22-26.csv"
 	If ($Get(pRecordMapName) = "") Set pRecordMapName = "Oliver.Riches"
@@ -196,7 +180,7 @@ ClassMethod Test(
 	If (tRecTerm = $CHAR(13,10)) Set pRecTerm = "\x0d\x0a"
 	Set tString = ..ProcessCSVFile(pFilename,pRecordMapName,pSep,pQuoteChar,pHasHeaderRow,pRecTerm,pCharEncoding)
 	Write tString,!
-	Quit $$$OK
+	Quit tString
 }
 
 }
