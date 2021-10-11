@@ -1,7 +1,9 @@
 Class Oliver.Util
 {
 
-ClassMethod DebugMerge(strMessage As %String = "", ByRef pArray) As %Status
+ClassMethod DebugMerge(
+	strMessage As %String = "",
+	ByRef pArray) As %Status
 {
 	Merge ^TESTunit($I(^TESTunit)) = pArray
 	Set tValue = ""
@@ -28,7 +30,12 @@ ClassMethod DebugStatus(pStatus As %Status) As %Status
 	Quit ..DebugTEST(tStatus)
 }
 
-ClassMethod CallRESTapi(pIris As %String, pUrl As %String, ByRef pResponseData As %DynamicObject, pType As %String = "GET", pStream As %Library.GlobalCharacterStream) As %Status
+ClassMethod CallRESTapi(
+	pIris As %String,
+	pUrl As %String,
+	ByRef pResponseData As %DynamicObject,
+	pType As %String = "GET",
+	pStream As %Library.GlobalCharacterStream) As %Status
 {
 	#define maxRESTapiErr 3
 	#define maxRetries 2
@@ -36,6 +43,7 @@ ClassMethod CallRESTapi(pIris As %String, pUrl As %String, ByRef pResponseData A
 	Do ..DebugTEST("Oliver.Util - CallRESTapi")
 	Do ..DebugTEST("pIris = "_$Get(pIris))
 	Do ..DebugTEST("pUrl = "_$Get(pUrl))
+	Do ..DebugTEST("pType = "_$Get(pType))
 	Set tErrorCount = 0
 	Set tParamIRIS = pIris
 	If (pIris = 0) Set pIris = "127.0.0.1:52773"
@@ -116,7 +124,11 @@ ClassMethod CallRESTapi(pIris As %String, pUrl As %String, ByRef pResponseData A
 	Quit tSC
 }
 
-ClassMethod CallRESTapi2(pIris As %String, pUrl As %String, ByRef pResponseData As %DynamicObject, pType As %String = "GET") As %Status
+ClassMethod CallRESTapi2(
+	pIris As %String,
+	pUrl As %String,
+	ByRef pResponseData As %DynamicObject,
+	pType As %String = "GET") As %Status
 {
 	Set tSC = ..CallRESTapi(pIris,pUrl,.pResponseData,pType)
 	If $$$ISOK(tSC) {
@@ -144,7 +156,10 @@ ClassMethod CallRESTapi2(pIris As %String, pUrl As %String, ByRef pResponseData 
 	Set myUnitTest = $Get(^myUnitTests)
 }
 
-ClassMethod ExecuteQueryOneValue(pQuery As %String, ByRef pResult As %String, pDEBUG As %Integer = 0) As %Status
+ClassMethod ExecuteQueryOneValue(
+	pQuery As %String,
+	ByRef pResult As %String,
+	pDEBUG As %Integer = 0) As %Status
 {
 	Do:pDEBUG ..DebugTEST("Oliver.Util - ExecuteQueryOneValue")
 	Do:pDEBUG ..DebugTEST("pQuery = "_pQuery)
@@ -166,7 +181,11 @@ ClassMethod ExecuteQueryOneValue(pQuery As %String, ByRef pResult As %String, pD
 /// Get a list of files in the directory configured by FilePath.
 /// The filenames are returned in a %ListOfDataTypes object. Each entry in the list is
 /// a semicolon-separated string containing: Filename;Type;Size;DateCreated;DateModified;FullPathName
-ClassMethod FileSet(Output pFileList As %ListOfDataTypes, pFilePath As %String = "", pWildcards As %String = "*", pIncludeDirs As %Boolean = 0) As %Status
+ClassMethod FileSet(
+	Output pFileList As %ListOfDataTypes,
+	pFilePath As %String = "",
+	pWildcards As %String = "*",
+	pIncludeDirs As %Boolean = 0) As %Status
 {
 	#; ={$Select($$$isVMS:"*.*",1:"*")}
 	Set $ZT="Trap",tSC=$$$OK
@@ -215,6 +234,8 @@ ClassMethod MakeRecordMap() As %Status
 
 ClassMethod Test() As %Status
 {
+	Set pDEBUG = 1
+	Do:pDEBUG ##class(Oliver.Util).DebugTEST("Oliver.Util - Test")
 	Kill ^TESTunit
 	Set tSC = ..MakeRecordMap()
 	Set tExists = ##class(Oliver.Production.Config).Exists()
