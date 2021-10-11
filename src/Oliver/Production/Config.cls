@@ -3,15 +3,36 @@ Class Oliver.Production.Config
 
 Parameter DataDir = "/irisdev/app/data";
 
+Parameter DEBUG = 1;
+
+Parameter MoneyProcess = "MoneyProcess";
+
 Parameter MoneyProduction = "Oliver.Money.Production";
+
+Parameter MoneyService = "MoneyService";
 
 Parameter RecordMap = "Oliver.Riches";
 
-ClassMethod AddItems() As %Status
+ClassMethod AddProcess() As %Status
 {
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - AddProcess")
 	Set pIris = "127.0.0.1:52773"
 	Set pType = "POST"
-	Set tItem = "MoneyService"
+	Set tItem = ..#MoneyProcess
+	Set tProduction = ..#MoneyProduction
+	Set pURL = "/production/items/"_tProduction_"/"_tItem
+	Set tSC = ..MakeDataAddProcess(.pStream)
+	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.obj,pType,pStream)
+	Set tSC = ..GetItemSettings(tItem)
+	Quit tSC
+}
+
+ClassMethod AddService() As %Status
+{
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - AddService")
+	Set pIris = "127.0.0.1:52773"
+	Set pType = "POST"
+	Set tItem = ..#MoneyService
 	Set tProduction = ..#MoneyProduction
 	Set pURL = "/production/items/"_tProduction_"/"_tItem
 	Set tSC = ..MakeDataAddService(.pStream)
@@ -23,18 +44,30 @@ ClassMethod AddItems() As %Status
 
 ClassMethod CreateMoney() As %Status
 {
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - CreateMoney")
 	Set pIris = "127.0.0.1:52773"
 	Set pType = "POST"
 	Set tProduction = ..#MoneyProduction
 	Set pURL = "/production/productions/"_tProduction
 	Set tSC = ..MakeData(.pStream)
 	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.obj,pType,pStream)
-	Set tSC = ..AddItems()
+	Set tItem = ..#MoneyService
+	Set tExists = ..ExistsItem(tItem)
+	If (tExists = 0) {
+		Set tSC = ..AddService()
+	}
+	Set tItem = ..#MoneyProcess
+	Set tExists = ..ExistsItem(tItem)
+	If (tExists = 0) {
+		Set tSC = ..AddProcess()
+	}
+
 	Quit tSC
 }
 
 ClassMethod Exists() As %Boolean
 {
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - Exists")
 	Set pDEBUG = 1
 	Set pIris = "127.0.0.1:52773"
 	Set pURL = "/production/productions"
@@ -66,20 +99,46 @@ ClassMethod Exists() As %Boolean
 	Quit 1
 }
 
-ClassMethod GetItemSettings(pItem As %String = "") As %Status
+ClassMethod ExistsItem(pItem As %String = "") As %Boolean
 {
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - ExistsItem")
+	Set tExists = 0
+	Set tSC = ..GetItemSettings(pItem,.obj)
+	If $$$ISERR(tSC) Do:..#DEBUG ##class(Oliver.Util).DebugStatus(tSC)
+	If $$$ISOK(tSC) {
+		Try {
+			Set pMessage = obj.message
+			Set pName = obj.name
+			Set pStatus = obj.status
+			Set pType = obj.type
+		}
+		Catch {
+			Set tSC = $$$ERROR($$$GeneralError,"JSON error")
+			Do:..#DEBUG ##class(Oliver.Util).DebugStatus(tSC)
+		}
+	}
+	Try {
+		If (pName = pItem) { Set tExists = 1 }
+	} Catch { }
+	Quit tExists
+}
+
+ClassMethod GetItemSettings(
+	pItem As %String = "",
+	ByRef pResponseData As %DynamicObject) As %Status
+{
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - GetItemSettings")
 	Set pIris = "127.0.0.1:52773"
 	Set pType = "GET"
-	Set tItem = "MoneyService"
 	Set tProduction = ..#MoneyProduction
-	Set pURL = "/production/items/"_tProduction_"/"_tItem
-	//Set tSC = ..MakeDataAddService(.pStream)
-	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.obj,pType,$Get(pStream))
+	Set pURL = "/production/items/"_tProduction_"/"_pItem
+	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.pResponseData,pType,$Get(pStream))
 	Quit tSC
 }
 
 ClassMethod MakeData(ByRef pData As %Stream.FileCharacter) As %Status
 {
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - MakeData")
 	Set comma = ","
 	Set tSC = $$$OK
 	Set pData = ##class(%Stream.FileCharacter).%New()
@@ -97,21 +156,42 @@ ClassMethod MakeData(ByRef pData As %Stream.FileCharacter) As %Status
 	Quit tSC
 }
 
-ClassMethod MakeDataAddService(ByRef pData As %Stream.FileCharacter) As %Status
+ClassMethod MakeDataAddItem(
+	ByRef pData As %Stream.FileCharacter,
+	pItemClass As %String) As %Status
 {
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - MakeDataAddItem")
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("pItemClass = "_pItemClass)
 	Set comma = ","
 	Set tSC = $$$OK
 	Set pData = ##class(%Stream.FileCharacter).%New()
 	Set tSC = pData.WriteLine("{")
 	Set tSC = pData.WriteLine(..MakeQLineNumber("enabled",1)_comma)
 	Set tSC = pData.WriteLine(..MakeQLineNumber("pool_size",1)_comma)
-	Set tSC = pData.WriteLine(..MakeQLineText("class_name","EnsLib.RecordMap.Service.FileService"))
+	Set tSC = pData.WriteLine(..MakeQLineText("class_name",pItemClass))
 	Set tSC = pData.WriteLine("}")
+	Quit tSC
+}
+
+ClassMethod MakeDataAddProcess(ByRef pData As %Stream.FileCharacter) As %Status
+{
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - MakeDataAddProcess")
+	Set tClassName = "Oliver.Process"
+	Set tSC = ..MakeDataAddItem(.pData,tClassName)
+	Quit tSC
+}
+
+ClassMethod MakeDataAddService(ByRef pData As %Stream.FileCharacter) As %Status
+{
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - MakeDataAddService")
+	Set tClassName = "EnsLib.RecordMap.Service.FileService"
+	Set tSC = ..MakeDataAddItem(.pData,tClassName)
 	Quit tSC
 }
 
 ClassMethod MakeDataPutService(ByRef pData As %Stream.FileCharacter) As %Status
 {
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - MakeDataPutService")
 	Set comma = ","
 	Set tSC = $$$OK
 	Set pData = ##class(%Stream.FileCharacter).%New()
@@ -153,7 +233,9 @@ ClassMethod MakeQArrayOpen(pName As %String = "") As %String
 	Quit pReturn
 }
 
-ClassMethod MakeQLineNumber(pName As %String = "", pValue As %String = "") As %String
+ClassMethod MakeQLineNumber(
+	pName As %String = "",
+	pValue As %String = "") As %String
 {
 	Set pReturn = ""
 	Set quote = """"
@@ -163,7 +245,9 @@ ClassMethod MakeQLineNumber(pName As %String = "", pValue As %String = "") As %S
 	Quit pReturn
 }
 
-ClassMethod MakeQLineText(pName As %String = "", pValue As %String = "") As %String
+ClassMethod MakeQLineText(
+	pName As %String = "",
+	pValue As %String = "") As %String
 {
 	Set pReturn = ""
 	Set quote = """"
@@ -176,6 +260,7 @@ ClassMethod MakeQLineText(pName As %String = "", pValue As %String = "") As %Str
 
 ClassMethod Test() As %Status
 {
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - Test")
 	Kill ^TESTunit
 	Set tSC = $$$OK
 	Set pDEBUG = 1
@@ -215,6 +300,7 @@ ClassMethod Test() As %Status
 
 ClassMethod UpdateItemSettings(pItem As %String = "") As %Status
 {
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - UpdateItemSettings")
 	Set pIris = "127.0.0.1:52773"
 	Set pType = "PUT"
 	Set tItem = "MoneyService"
