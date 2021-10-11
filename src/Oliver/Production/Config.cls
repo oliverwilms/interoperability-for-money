@@ -217,9 +217,12 @@ ClassMethod MakeDataPutService(ByRef pData As %Stream.FileCharacter) As %Status
 	Set tSC = pData.WriteLine(..MakeQLineText("name","RecordMap")_comma)
 	Set tSC = pData.WriteLine(..MakeQLineText("target","Host")_comma)
 	Set tSC = pData.WriteLine(..MakeQLineText("value",..#RecordMap))
+	Set tSC = pData.WriteLine("}"_comma)
+	Set tSC = pData.WriteLine("{")
+	Set tSC = pData.WriteLine(..MakeQLineText("name","TargetConfigNames")_comma)
+	Set tSC = pData.WriteLine(..MakeQLineText("target","Host")_comma)
+	Set tSC = pData.WriteLine(..MakeQLineText("value",..#MoneyProcess))
 	Set tSC = pData.WriteLine("}]}")
-	Quit tSC
-
 	Quit tSC
 }
 
