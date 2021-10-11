@@ -214,7 +214,7 @@ ClassMethod GetPass(pIris As %String) As %String
 	Quit tPass
 }
 
-ClassMethod MakeRecordMap() As %Status
+ClassMethod MakeRecordMap(pGenerate As %Boolean = 1) As %Status
 {
 	Set pDEBUG = 1
 	Do:pDEBUG ..DebugTEST("Oliver.Util - MakeRecordMap")
@@ -228,7 +228,9 @@ ClassMethod MakeRecordMap() As %Status
 	Set tRecordMap = ##class(Oliver.Production.Config).#RecordMap
 	Set tReturn = ##class(Oliver.CSVRecordWizard).Test(tDataFile,tRecordMap)
 	Do:pDEBUG ..DebugTEST("tReturn = "_tReturn)
-	//Do:pDEBUG ..DebugStatus(tSC)
+	If pGenerate {
+		Set tSC = ##class(EnsLib.RecordMap.Generator).GenerateObject(tRecordMap)
+	}
 	Quit $Get(tSC,$$$OK)
 }
 
