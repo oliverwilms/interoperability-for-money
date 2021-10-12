@@ -5,6 +5,8 @@ Parameter DataDir = "/irisdev/app/data";
 
 Parameter DEBUG = 1;
 
+Parameter MoneyOperation = "MoneyOperation";
+
 Parameter MoneyProcess = "MoneyProcess";
 
 Parameter MoneyProduction = "Oliver.Money.Production";
@@ -12,6 +14,20 @@ Parameter MoneyProduction = "Oliver.Money.Production";
 Parameter MoneyService = "MoneyService";
 
 Parameter RecordMap = "Oliver.Riches";
+
+ClassMethod AddOperation() As %Status
+{
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - AddOperation")
+	Set pIris = "127.0.0.1:52773"
+	Set pType = "POST"
+	Set tItem = ..#MoneyOperation
+	Set tProduction = ..#MoneyProduction
+	Set pURL = "/production/items/"_tProduction_"/"_tItem
+	Set tSC = ..MakeDataAddOperation(.pStream)
+	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.obj,pType,pStream)
+	Set tSC = ..GetItemSettings(tItem)
+	Quit tSC
+}
 
 ClassMethod AddProcess() As %Status
 {
@@ -61,7 +77,11 @@ ClassMethod CreateMoney() As %Status
 	If (tExists = 0) {
 		Set tSC = ..AddProcess()
 	}
-
+	Set tItem = ..#MoneyOperation
+	Set tExists = ..ExistsItem(tItem)
+	If (tExists = 0) {
+		Set tSC = ..AddOperation()
+	}
 	Quit tSC
 }
 
@@ -170,6 +190,14 @@ ClassMethod MakeDataAddItem(
 	Set tSC = pData.WriteLine(..MakeQLineNumber("pool_size",1)_comma)
 	Set tSC = pData.WriteLine(..MakeQLineText("class_name",pItemClass))
 	Set tSC = pData.WriteLine("}")
+	Quit tSC
+}
+
+ClassMethod MakeDataAddOperation(ByRef pData As %Stream.FileCharacter) As %Status
+{
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - MakeDataAddOperation")
+	Set tClassName = "EnsLib.REST.GenericOperation"
+	Set tSC = ..MakeDataAddItem(.pData,tClassName)
 	Quit tSC
 }
 
