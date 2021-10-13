@@ -4,13 +4,15 @@ Class Oliver.Operation Extends EnsLib.REST.Operation
 
 Parameter INVOCATION = "Queue";
 
-Method postQuery(pRequest As Oliver.REST.MoneyRequest, Output pResponse As Oliver.REST.MoneyResponse) As %Status
+Method postQuery(
+	pRequest As Oliver.REST.MoneyRequest,
+	Output pResponse As Oliver.REST.MoneyResponse) As %Status
 {
    
    try {
       // Prepare and log the call
       // Append the city to the URL configured for adapter
-      Set tURL=..Adapter.URL_"?q="_pRequest.City_"&units=imperial"
+      Set tURL=..Adapter.URL_"?q="_pRequest.Query_"&units=imperial"
       
       // Execute the call
       Set tSC=..Adapter.PostURL(tURL,.tHttpResponse)
