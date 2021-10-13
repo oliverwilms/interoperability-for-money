@@ -143,9 +143,7 @@ ClassMethod ExistsItem(pItem As %String = "") As %Boolean
 	Quit tExists
 }
 
-ClassMethod GetItemSettings(
-	pItem As %String = "",
-	ByRef pResponseData As %DynamicObject) As %Status
+ClassMethod GetItemSettings(pItem As %String = "", ByRef pResponseData As %DynamicObject) As %Status
 {
 	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - GetItemSettings")
 	Set pIris = "127.0.0.1:52773"
@@ -176,9 +174,7 @@ ClassMethod MakeData(ByRef pData As %Stream.FileCharacter) As %Status
 	Quit tSC
 }
 
-ClassMethod MakeDataAddItem(
-	ByRef pData As %Stream.FileCharacter,
-	pItemClass As %String) As %Status
+ClassMethod MakeDataAddItem(ByRef pData As %Stream.FileCharacter, pItemClass As %String) As %Status
 {
 	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - MakeDataAddItem")
 	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("pItemClass = "_pItemClass)
@@ -196,7 +192,7 @@ ClassMethod MakeDataAddItem(
 ClassMethod MakeDataAddOperation(ByRef pData As %Stream.FileCharacter) As %Status
 {
 	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - MakeDataAddOperation")
-	Set tClassName = "EnsLib.REST.GenericOperation"
+	Set tClassName = "Oliver.Operation"
 	Set tSC = ..MakeDataAddItem(.pData,tClassName)
 	Quit tSC
 }
@@ -264,9 +260,7 @@ ClassMethod MakeQArrayOpen(pName As %String = "") As %String
 	Quit pReturn
 }
 
-ClassMethod MakeQLineNumber(
-	pName As %String = "",
-	pValue As %String = "") As %String
+ClassMethod MakeQLineNumber(pName As %String = "", pValue As %String = "") As %String
 {
 	Set pReturn = ""
 	Set quote = """"
@@ -276,9 +270,7 @@ ClassMethod MakeQLineNumber(
 	Quit pReturn
 }
 
-ClassMethod MakeQLineText(
-	pName As %String = "",
-	pValue As %String = "") As %String
+ClassMethod MakeQLineText(pName As %String = "", pValue As %String = "") As %String
 {
 	Set pReturn = ""
 	Set quote = """"
