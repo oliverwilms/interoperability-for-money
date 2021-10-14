@@ -54,7 +54,8 @@ ClassMethod AddService() As %Status
 	Set tSC = ..MakeDataAddService(.pStream)
 	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.obj,pType,pStream)
 	Set tSC = ..GetItemSettings(tItem)
-	Set tSC = ..UpdateItemSettings(tItem)
+	Set tSC = ..MakeDataPutService(.pStream)
+	Set tSC = ..PutItemSettings(tItem,.pStream)
 	Quit tSC
 }
 
@@ -213,6 +214,43 @@ ClassMethod MakeDataAddService(ByRef pData As %Stream.FileCharacter) As %Status
 	Quit tSC
 }
 
+ClassMethod MakeDataPutOperation(ByRef pData As %Stream.FileCharacter) As %Status
+{
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - MakeDataPutService")
+	Set comma = ","
+	Set tSC = $$$OK
+	Set pData = ##class(%Stream.FileCharacter).%New()
+	Set tSC = pData.WriteLine("{")
+	Set tSC = pData.WriteLine(..MakeQLineNumber("enabled",1)_comma)
+	Set tSC = pData.WriteLine(..MakeQLineNumber("pool_size",1)_comma)
+	Set tSC = pData.WriteLine(..MakeQLineText("class_name","EnsLib.RecordMap.Service.FileService"))
+	Set tSC = pData.WriteLine("}")
+
+	Set comma = ","
+	Set tSC = $$$OK
+	Set pData = ##class(%Stream.FileCharacter).%New()
+	Set tSC = pData.WriteLine("{")
+	Set tSC = pData.WriteLine(..MakeQLineNumber("pool_size",2)_comma)
+	Set tSC = pData.WriteLine(..MakeQLineNumber("log_trace_events",1)_comma)
+	Set tSC = pData.WriteLine(..MakeQArrayOpen("settings"))
+	Set tSC = pData.WriteLine("{")
+	Set tSC = pData.WriteLine(..MakeQLineText("name","FilePath")_comma)
+	Set tSC = pData.WriteLine(..MakeQLineText("target","Adapter")_comma)
+	Set tSC = pData.WriteLine(..MakeQLineText("value",..#DataDir))
+	Set tSC = pData.WriteLine("}"_comma)
+	Set tSC = pData.WriteLine("{")
+	Set tSC = pData.WriteLine(..MakeQLineText("name","RecordMap")_comma)
+	Set tSC = pData.WriteLine(..MakeQLineText("target","Host")_comma)
+	Set tSC = pData.WriteLine(..MakeQLineText("value",..#RecordMap))
+	Set tSC = pData.WriteLine("}"_comma)
+	Set tSC = pData.WriteLine("{")
+	Set tSC = pData.WriteLine(..MakeQLineText("name","TargetConfigNames")_comma)
+	Set tSC = pData.WriteLine(..MakeQLineText("target","Host")_comma)
+	Set tSC = pData.WriteLine(..MakeQLineText("value",..#MoneyProcess))
+	Set tSC = pData.WriteLine("}]}")
+	Quit tSC
+}
+
 ClassMethod MakeDataPutService(ByRef pData As %Stream.FileCharacter) As %Status
 {
 	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - MakeDataPutService")
@@ -281,6 +319,19 @@ ClassMethod MakeQLineText(pName As %String = "", pValue As %String = "") As %Str
 	Quit pReturn
 }
 
+ClassMethod PutItemSettings(pItem As %String = "", ByRef pStream) As %Status
+{
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - PutItemSettings")
+	Set pIris = "127.0.0.1:52773"
+	Set pType = "PUT"
+	//Set tItem = "MoneyService"
+	Set tProduction = ..#MoneyProduction
+	Set pURL = "/production/items/"_tProduction_"/"_pItem
+	Set tSC = ..MakeDataPutService(.pStream)
+	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.obj,pType,$Get(pStream))
+	Quit tSC
+}
+
 ClassMethod Test() As %Status
 {
 	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - Test")
@@ -318,19 +369,6 @@ ClassMethod Test() As %Status
 		Set tSC = ..MakeData(.pStream)
 		//Set tSC = ..CallRESTapi(pIris,pURL,.obj,pType,pStream)
 	}
-	Quit tSC
-}
-
-ClassMethod UpdateItemSettings(pItem As %String = "") As %Status
-{
-	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - UpdateItemSettings")
-	Set pIris = "127.0.0.1:52773"
-	Set pType = "PUT"
-	Set tItem = "MoneyService"
-	Set tProduction = ..#MoneyProduction
-	Set pURL = "/production/items/"_tProduction_"/"_tItem
-	Set tSC = ..MakeDataPutService(.pStream)
-	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.obj,pType,$Get(pStream))
 	Quit tSC
 }
 
