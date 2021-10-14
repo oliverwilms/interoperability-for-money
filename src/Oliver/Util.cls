@@ -214,6 +214,16 @@ ClassMethod GetPass(pIris As %String) As %String
 	Quit tPass
 }
 
+ClassMethod MakeCredential() As %Status
+{
+	Set c = ##class(Ens.Config.Credentials).%New()
+	Set c.Password = "abc123"
+	Set c.SystemName = "restapi"
+	Set c.Username = "_SYSTEM"
+	Set tSC = c.%Save()
+	Quit tSC
+}
+
 ClassMethod MakeRecordMap(pGenerate As %Boolean = 1) As %Status
 {
 	Set pDEBUG = 1
@@ -239,6 +249,7 @@ ClassMethod Test() As %Status
 	Set pDEBUG = 1
 	Do:pDEBUG ##class(Oliver.Util).DebugTEST("Oliver.Util - Test")
 	Kill ^TESTunit
+	Set tSC = ..MakeCredential()
 	Set tSC = ..MakeRecordMap()
 	Set tExists = ##class(Oliver.Production.Config).Exists()
 	//If tExists Quit $$$OK
