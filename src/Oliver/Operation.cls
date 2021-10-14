@@ -23,7 +23,9 @@ Method postQuery(
       If ..#DEBUG Do ##class(Oliver.Util).DebugTEST("tURL = "_tURL)
 
       // Execute the call
+      #Dim tHttpResponse As %Net.HttpResponse
       Set tSC=..Adapter.PostURL(tURL,.tHttpResponse)
+      If ..#DEBUG Do ##class(Oliver.Util).DebugTEST("tHttpResponse = "_tHttpResponse.StatusCode)
       If ..#DEBUG Do ##class(Oliver.Util).DebugStatus(tSC)
       
       // Return the response
@@ -35,6 +37,7 @@ Method postQuery(
       If $IsObject(tHttpResponse) {
          // Instantiate the response object
          set pResponse = ##class(Oliver.REST.MoneyResponse).%New()
+         /*
          // Convert JSON into a Proxy Object
          set tSC = ..JSONStreamToObject(tHttpResponse.Data, .tProxy)
          if (tSC){                                 
@@ -50,6 +53,7 @@ Method postQuery(
             set pResponse.Sunrise = $ZT($PIECE($ZDTH(tProxy.sys.sunrise, -2),",",2),3)
             set pResponse.Sunset = $ZT($PIECE($ZDTH(tProxy.sys.sunset, -2),",",2),3)
           }
+          */
        }
    }catch{
        Set tSC=$$$SystemError
