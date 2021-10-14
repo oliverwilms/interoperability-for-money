@@ -7,6 +7,12 @@ XData setup
   <Default Name="Namespace" Value="IRISAPP"/>
   <Default Name="app" Value="irisapp" />
 
+  <Namespace Name="%SYS" Create="no">
+    <If Condition='(##class(%File).Exists("/irisdev/app/%ZSTART.int")=1)'>
+      <Import File="/irisdev/app/%ZSTART.int" Flags="ck" Recurse="1"/>
+    </If>
+  </Namespace>
+
   <Namespace Name="${Namespace}" Code="${Namespace}" Data="${Namespace}" Create="yes" Ensemble="1">
     <Configuration>
       <Database Name="${Namespace}" Dir="/opt/${app}/data" Create="yes" Resource="%DB_${Namespace}"/>
