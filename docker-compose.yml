@@ -1,10 +1,16 @@
-version: '3.6'
+version: '3.7'
+
 services:
   iris:
     build: 
       context: .
       dockerfile: Dockerfile
+    hostname: interoperability
+    image: interoperability
     init: true
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.10
     restart: always
     ports: 
       - 1972
@@ -13,3 +19,28 @@ services:
       - 53773
     volumes:
       - ./:/irisdev/app
+
+  analytics:
+    build: 
+      context: ../iris-analytics
+      dockerfile: Dockerfile
+    hostname: analytics
+    image: analytics
+    init: true
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.30
+    restart: always
+    ports: 
+      - 49158:1972
+      - 32792:52773
+      - 53773
+    volumes:
+      - ../iris-analytics/:/irisdev/app
+
+networks:
+  app_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.16.238.0/24"
