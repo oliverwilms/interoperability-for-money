@@ -11,7 +11,7 @@ SYSTEM ; InterSystems IRIS starting
 		Write $ZDateTime($NOW(),8,1,3)_" : "_$JOB_" : ZSTU LocalHostName = "_tHost,!
 		Write $ZDateTime($NOW(),8,1,3)_" : "_$JOB_" : ZSTU IRIS_MIRROR_ROLE = "_tRole,!
 		ZN "IRISAPP"
-		Set tSC = ##class(Oliver.Util).Test()
+		JOB ##class(Oliver.Util).Test()
 		ZN "%SYS"
 	} Catch { }
 	Quit
