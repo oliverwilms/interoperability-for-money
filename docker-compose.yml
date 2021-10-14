@@ -13,10 +13,10 @@ services:
         ipv4_address: 172.16.238.10
     restart: always
     ports: 
-      - 1972
+      - 51972:1972
       - 51795:51773
       - 52795:52773
-      - 53773
+      - 53795:53773
     volumes:
       - ./:/irisdev/app
 
@@ -34,7 +34,7 @@ services:
     ports: 
       - 49158:1972
       - 32792:52773
-      - 53773
+      - 53792:53773
     volumes:
       - ../iris-analytics/:/irisdev/app
 
