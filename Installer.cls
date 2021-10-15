@@ -8,8 +8,8 @@ XData setup
   <Default Name="app" Value="irisapp" />
 
   <Namespace Name="%SYS" Create="no">
-    <If Condition='(##class(%File).Exists("/irisdev/app/%ZSTART.int")=1)'>
-      <Import File="/irisdev/app/%ZSTART.int" Flags="ck" Recurse="1"/>
+    <If Condition='(##class(%File).Exists("/opt/irisapp/%ZSTART.int")=1)'>
+      <Import File="/opt/irisapp/%ZSTART.int" Flags="ck" Recurse="1"/>
     </If>
   </Namespace>
 
