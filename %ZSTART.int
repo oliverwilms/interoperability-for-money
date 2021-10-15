@@ -36,7 +36,6 @@ JOB ; JOB'd process begins
 		Set tMirrorStatus = $SYSTEM.Mirror.GetStatus($Get(MirrorName))
 		Set ^TESTzstu(zstu,1) = tMirrorStatus
 		Write tMirrorStatus,!
-		ZN "%SYS"
 	} Catch { }
 	Quit
 CALLIN ; process enters via CALLIN interface
