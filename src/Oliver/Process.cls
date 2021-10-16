@@ -15,7 +15,7 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 <code xpos='200' ypos='250' />
 <call name='MoneyOperation' target='MoneyOperation' async='1' xpos='200' ypos='350' >
 <request type='Oliver.REST.MoneyRequest' >
-<assign property="callrequest.Query" value="request.Memo" action="set" />
+<assign property="callrequest.Query" value="##class(Oliver.REST.Util).RecordToQuery(request)" action="set" />
 </request>
 <response type='Ens.Response' />
 </call>
