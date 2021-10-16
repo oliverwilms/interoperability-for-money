@@ -25,9 +25,10 @@ Method postQuery(
       // Execute the call
       #Dim tHttpResponse As %Net.HttpResponse
       Set tSC=..Adapter.PostURL(tURL,.tHttpResponse)
-      If ..#DEBUG Do ##class(Oliver.Util).DebugTEST("tHttpResponse = "_tHttpResponse.StatusCode)
-      If ..#DEBUG Do ##class(Oliver.Util).DebugStatus(tSC)
-      
+      If ..#DEBUG {
+	      Do ##class(Oliver.Util).DebugStatus(tSC)
+	      If $IsObject(tHttpResponse) Do ##class(Oliver.Util).DebugTEST("tHttpResponse = "_tHttpResponse.StatusCode)
+      }
       // Return the response
       If $$$ISERR(tSC)&&$IsObject(tHttpResponse)&&$IsObject(tHttpResponse.Data)&&tHttpResponse.Data.Size {
          Set tSC=$$$ERROR($$$EnsErrGeneral,$$$StatusDisplayString(tSC)_":"_tHttpResponse.Data.Read())
