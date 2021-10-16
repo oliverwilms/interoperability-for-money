@@ -1,7 +1,7 @@
 Class Oliver.REST.MoneyRequest Extends (%Persistent, Ens.Util.MessageBodyMethods)
 {
 
-Property Query As %String;
+Property Query As %String(MAXLEN = 32765);
 
 Storage Default
 {
