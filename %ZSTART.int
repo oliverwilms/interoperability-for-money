@@ -19,6 +19,7 @@ SYSTEM ; InterSystems IRIS starting
 LOGIN ; a user logs into InterSystems IRIS
 	Quit
 JOB ; JOB'd process begins
+	Quit
 	New
 	Try {
 		Set zstu = $Increment(^TESTzstu)
