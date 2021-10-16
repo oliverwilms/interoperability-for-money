@@ -282,7 +282,6 @@ ClassMethod MakeRecordMap(pGenerate As %Boolean = 1) As %Status
 	Do:pDEBUG ..DebugTEST("tDataDir = "_tDataDir)
 	Set tFilename = "export.CSV"
 	Do:pDEBUG ..DebugTEST("tFilename = "_tFilename)
-	Set x = "/"
 	Set tDataFile = ..FindCSV(tDataDir,tFilename)
 	Do:pDEBUG ..DebugTEST("tDataFile = "_tDataFile)
 	If (tDataFile = "") {
