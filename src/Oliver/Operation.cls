@@ -6,7 +6,7 @@ Parameter INVOCATION = "Queue";
 
 Parameter DEBUG = 1;
 
-/// Insert into Riches.Transact (Account,TranDate,Merchant,Category,AmountDebit,AmountCredit) values ('Chase Better Banking Checking','1-3-2021','Aldi','Groceries','51.41','')
+/// Insert into Riches.Transact (Account,TranDate,Merchant,Category,AmountDebit,AmountCredit) values ...
 Method postQuery(
 	pRequest As Oliver.REST.MoneyRequest,
 	Output pResponse As Oliver.REST.MoneyResponse) As %Status
@@ -14,17 +14,16 @@ Method postQuery(
 	If ..#DEBUG Do ##class(Oliver.Util).DebugTEST("Oliver.Operation - postQuery")
 	Try {
       // Prepare and log the call
-      // Append the city to the URL configured for adapter
-      //Set tURL=..Adapter.URL_"?q="_pRequest.Query_"&units=imperial"
-      Set tQuery = "Insert into Riches.Transact (Account,TranDate,Merchant,Category,AmountDebit,AmountCredit) values ('Chase Better Banking Checking','1-3-2021','Aldi','Groceries','51.41','')"
-      Set tURL=..Adapter.URL_tQuery
+      // Append the query to the URL configured for adapter
+      Set tQuery = pRequest.Query
+      Set tURL = ..Adapter.URL_tQuery
       If ..#DEBUG Do ##class(Oliver.Util).DebugTEST("tURL = "_tURL)
       Set tURL = ##class(%CSP.Page).EscapeURL(tURL)
       If ..#DEBUG Do ##class(Oliver.Util).DebugTEST("tURL = "_tURL)
 
       // Execute the call
       #Dim tHttpResponse As %Net.HttpResponse
-      Set tSC=..Adapter.PostURL(tURL,.tHttpResponse)
+      Set tSC = ..Adapter.PostURL(tURL,.tHttpResponse)
       If ..#DEBUG {
 	      Do ##class(Oliver.Util).DebugStatus(tSC)
 	      If $IsObject(tHttpResponse) Do ##class(Oliver.Util).DebugTEST("tHttpResponse = "_tHttpResponse.StatusCode)
@@ -57,7 +56,7 @@ Method postQuery(
           */
        }
    }catch{
-       Set tSC=$$$SystemError
+       Set tSC = $$$SystemError
    }
    Quit tSC
 }
