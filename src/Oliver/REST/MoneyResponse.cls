@@ -1,23 +1,16 @@
 Class Oliver.REST.MoneyResponse Extends (%Persistent, Ens.Util.MessageBodyMethods)
 {
 
-Property Temperature As %String;
+/// The HTTP status code. This is useful to determine if the request was
+/// successful. Look in the rfc for HTTP to see which codes are supported
+/// and what they mean. A human readable form of this code is stored as
+/// the <PROPERTY>ReasonPhrase</PROPERTY>
+Property ResponseStatusCode As %Integer;
 
-Property MinTemp As %String;
+/// This is the human readable reason that goes with the <PROPERTY>ResponseStatusCode</PROPERTY>.
+Property ReasonPhrase As %String;
 
-Property MaxTemp As %String;
-
-Property Pressure As %String;
-
-Property Humidity As %String;
-
-Property WindSpeed As %String;
-
-Property WindDirection As %String;
-
-Property Sunrise As %String;
-
-Property Sunset As %String;
+Property PostStatus As %Status;
 
 Storage Default
 {
@@ -26,31 +19,13 @@ Storage Default
 <Value>%%CLASSNAME</Value>
 </Value>
 <Value name="2">
-<Value>Temperature</Value>
+<Value>ResponseStatusCode</Value>
 </Value>
 <Value name="3">
-<Value>MinTemp</Value>
+<Value>ReasonPhrase</Value>
 </Value>
 <Value name="4">
-<Value>MaxTemp</Value>
-</Value>
-<Value name="5">
-<Value>Pressure</Value>
-</Value>
-<Value name="6">
-<Value>Humidity</Value>
-</Value>
-<Value name="7">
-<Value>WindSpeed</Value>
-</Value>
-<Value name="8">
-<Value>WindDirection</Value>
-</Value>
-<Value name="9">
-<Value>Sunrise</Value>
-</Value>
-<Value name="10">
-<Value>Sunset</Value>
+<Value>PostStatus</Value>
 </Value>
 </Data>
 <DataLocation>^Oliver.REST.MoneyResponseD</DataLocation>
