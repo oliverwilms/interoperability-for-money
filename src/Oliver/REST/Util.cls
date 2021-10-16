@@ -39,7 +39,7 @@ ClassMethod QuotedValue(
 }
 
 /// Insert into Riches.Transact (Account,TranDate,Merchant,Category,AmountDebit,AmountCredit) values ('Chase Better Banking Checking','1-3-2021','Aldi','Groceries','51.41','')
-ClassMethod RecordToQuery(pRecord As EnsLib.RecordMap.Base) As %Status
+ClassMethod RecordToQuery(pRecord As EnsLib.RecordMap.Base) As %String
 {
 	Set tAccount = ""
 	Set tAmountCredit = ""
