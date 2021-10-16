@@ -7,7 +7,7 @@ Parameter DEBUG = 1;
 
 Parameter AnalyticsCredential = "restapi";
 
-Parameter AnalyticsHTTPPort = 32792;
+Parameter AnalyticsHTTPPort = 52773;
 
 Parameter AnalyticsHTTPServer = "172.16.238.30";
 
