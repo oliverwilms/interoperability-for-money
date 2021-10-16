@@ -1,5 +1,5 @@
 # interoperability-for-money
-This is my InterSystems IRIS Interoperability solution for InterSystemsw Interoperability Contest 2021.
+This is my InterSystems IRIS Interoperability solution for InterSystems Interoperability Contest 2021.
 
 ## Installation 
 
@@ -24,10 +24,10 @@ The Interoperability Production is intended to send messages to my Analytics sol
 $ git clone https://github.com/oliverwilms/iris-analytics.git
 ```
 
-Navigate to interoperability-for-money directory and run:
+Navigate to interoperability-for-money directory and start the application using docker-compose
 
 ```
 $ cd interoperability-for-money
 $ docker-compose up -d
 ```
-and open then http://localhost:52795/csp/sys/UtilHome.csp
+There are two containers defined. Interoperability container portal can be found at http://localhost:52795/csp/sys/UtilHome.csp. Analytics container can be found at
