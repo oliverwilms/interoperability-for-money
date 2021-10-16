@@ -208,6 +208,56 @@ Trap
 	Goto Exit
 }
 
+/// ZPM FileCopy had changed filename extension to uppercase
+ClassMethod FindCSV(
+	pDirectory As %String = "",
+	pFilename As %String = "") As %String
+{
+	Set pDEBUG = 1
+	Do:pDEBUG ..DebugTEST("Oliver.Util - FindCSV")
+	Do:pDEBUG ..DebugTEST("pDirectory = "_pDirectory)
+	Do:pDEBUG ..DebugTEST("pFilename = "_pFilename)
+	Set x = "/"
+	Set tDataFile = pDirectory _ x _ pFilename
+	Do:pDEBUG ..DebugTEST("tDataFile = "_tDataFile)
+	Set tExists = ##class(%File).Exists(tDataFile)
+	If tExists { Quit tDataFile }
+	/// Exact pFilename does NOT exist
+	Set len = $Length(pFilename,".")
+	Set ext = $Piece(pFilename,".",len)
+	/// Try uppercase "CSV"
+	Set EXT = $ZCONVERT(ext,"U")
+	Set tDataFile = ..FindFileWithExtension(pDirectory,pFilename,EXT)
+	Do:pDEBUG ..DebugTEST("tDataFile = "_tDataFile)
+	If (tDataFile '= "") { Quit tDataFile }
+	/// Try lowercase "csv"
+	Set ext = $ZCONVERT(ext,"L")
+	Set tDataFile = ..FindFileWithExtension(pDirectory,pFilename,ext)
+	Do:pDEBUG ..DebugTEST("tDataFile = "_tDataFile)
+	If (tDataFile '= "") { Quit tDataFile }
+	Quit ""
+}
+
+ClassMethod FindFileWithExtension(
+	pDirectory As %String = "",
+	pFilename As %String = "",
+	pExtension As %String = "") As %String
+{
+	Set pDEBUG = 1
+	Do:pDEBUG ..DebugTEST("Oliver.Util - FindFileWithExtension")
+	Do:pDEBUG ..DebugTEST("pDirectory = "_pDirectory)
+	Do:pDEBUG ..DebugTEST("pFilename = "_pFilename)
+	Do:pDEBUG ..DebugTEST("pExtension = "_pExtension)
+	Set x = "/"
+	Set len = $Length(pFilename,".")
+	Set $Piece(pFilename,".",len) = pExtension
+	Set tDataFile = pDirectory _ x _ pFilename
+	Do:pDEBUG ..DebugTEST("tDataFile = "_tDataFile)
+	Set tExists = ##class(%File).Exists(tDataFile)
+	If tExists Quit tDataFile
+	Quit ""
+}
+
 ClassMethod GetPass(pIris As %String) As %String
 {
 	Set tPass = "SYS"
@@ -233,8 +283,11 @@ ClassMethod MakeRecordMap(pGenerate As %Boolean = 1) As %Status
 	Set tFilename = "export.CSV"
 	Do:pDEBUG ..DebugTEST("tFilename = "_tFilename)
 	Set x = "/"
-	Set tDataFile = tDataDir _ x _ tFilename
+	Set tDataFile = ..FindCSV(tDataDir,tFilename)
 	Do:pDEBUG ..DebugTEST("tDataFile = "_tDataFile)
+	If (tDataFile = "") {
+		Quit $$$ERROR($$$GeneralError,"Unable to find "_tFilename)
+	}
 	Set tRecordMap = ##class(Oliver.Production.Config).#RecordMap
 	Set tReturn = ##class(Oliver.CSVRecordWizard).Test(tDataFile,tRecordMap)
 	Do:pDEBUG ..DebugTEST("tReturn = "_tReturn)
