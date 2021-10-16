@@ -33,3 +33,7 @@ $ docker-compose up -d
 There are two containers defined. Interoperability container portal can be found at http://localhost:52795/csp/sys/UtilHome.csp. Analytics container can be found at http://localhost:32792/csp/sys/UtilHome.csp.
 
 SELECT COUNT(*) FROM RICHES.TRANSACT
+
+DELETE RICHES.TRANSACT
+
+
