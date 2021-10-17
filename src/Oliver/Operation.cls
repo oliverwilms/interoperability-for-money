@@ -12,6 +12,8 @@ Method postQuery(
 	Output pResponse As Oliver.REST.MoneyResponse) As %Status
 {
 	If ..#DEBUG Do ##class(Oliver.Util).DebugTEST("Oliver.Operation - postQuery")
+    // Instantiate the response object
+    Set pResponse = ##class(Oliver.REST.MoneyResponse).%New()
 	Try {
       // Prepare and log the call
       // Append the query to the URL configured for adapter
@@ -24,6 +26,7 @@ Method postQuery(
       // Execute the call
       #Dim tHttpResponse As %Net.HttpResponse
       Set tSC = ..Adapter.PostURL(tURL,.tHttpResponse)
+      Set pResponse.PostStatus = tSC
       If ..#DEBUG {
 	      Do ##class(Oliver.Util).DebugStatus(tSC)
 	      If $IsObject(tHttpResponse) Do ##class(Oliver.Util).DebugTEST("tHttpResponse = "_tHttpResponse.StatusCode)
@@ -35,8 +38,8 @@ Method postQuery(
       }
       Quit:$$$ISERR(tSC)
       If $IsObject(tHttpResponse) {
-         // Instantiate the response object
-         set pResponse = ##class(Oliver.REST.MoneyResponse).%New()
+         Set pResponse.ResponseStatusCode = tHttpResponse.StatusCode
+         Set pResponse.ReasonPhrase = tHttpResponse.ReasonPhrase
          /*
          // Convert JSON into a Proxy Object
          set tSC = ..JSONStreamToObject(tHttpResponse.Data, .tProxy)
@@ -55,7 +58,7 @@ Method postQuery(
           }
           */
        }
-   }catch{
+   } Catch {
        Set tSC = $$$SystemError
    }
    Quit tSC
