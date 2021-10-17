@@ -38,7 +38,8 @@ ClassMethod QuotedValue(
 	Quit pQuote_pValue_pQuote
 }
 
-/// Insert into Riches.Transact (Account,TranDate,Merchant,Category,AmountDebit,AmountCredit) values ('Chase Better Banking Checking','1-3-2021','Aldi','Groceries','51.41','')
+/// Insert into Riches.Transact (Account,TranDate,Merchant,Category,AmountDebit,AmountCredit)
+/// values ('Chase Better Banking Checking','1-3-2021','Aldi','Groceries','51.41','')
 ClassMethod RecordToQuery(pRecord As EnsLib.RecordMap.Base) As %String
 {
 	Set tAccount = ""
@@ -64,6 +65,7 @@ ClassMethod RecordToQuery(pRecord As EnsLib.RecordMap.Base) As %String
 	Set tQuery = tQuery_..QuotedValue(tAmountDebit)_comma
 	Set tQuery = tQuery_..QuotedValue(tAmountCredit)
 	Set tQuery = tQuery_")"
+	Set tQuery = $Translate(tQuery,"/","-")  // Slashes in date caused 404 Not Found
 	Quit tQuery
 }
 
