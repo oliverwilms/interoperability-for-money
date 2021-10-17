@@ -20,10 +20,11 @@ XData setup
     <CSPApplication Url="/csp/${app}" Directory="${cspdir}${app}"  ServeFiles="1" Recurse="1" MatchRoles=":%DB_${Namespace}" AuthenticationMethods="32"/>
   </Namespace>
   <RunInstall Class="App.Installer" Method="CreateWebAppREST"/>
+  <RunInstall Class="App.Installer" Method="SetAutoStart"/>
 </Manifest>
 }
 
-ClassMethod CreateWebAppREST(pVars,pLogLevel,tInstaller) As %Status
+ClassMethod CreateWebAppREST(pVars, pLogLevel, tInstaller) As %Status
 {
   Set Namespace = tInstaller.Evaluate("${Namespace}")
   Do tInstaller.PushNS("%SYS")
@@ -42,6 +43,20 @@ ClassMethod CreateWebAppREST(pVars,pLogLevel,tInstaller) As %Status
   Set cspProperties("Resource") = ""
   Set cspProperties("ServeFiles") = 1
   Set tSC = ##class(Security.Applications).Create(cspName,.cspProperties)
+  Do tInstaller.PopNS()
+  If $$$ISERR(tSC) Throw ##class(%Installer.Exception).CreateFromStatus(tSC)
+  Quit $$$OK
+}
+
+ClassMethod SetAutoStart(ByRef pVars, pLogLevel, tInstaller) As %Status
+{
+  Set Namespace = tInstaller.Evaluate("${Namespace}")
+  Do tInstaller.PushNS(Namespace)
+  Set tSC = $$$OK
+  Try {
+    Set ^Ens.AutoStart = "Oliver.Money.Production"
+    Set ^Ens.AutoStart("StartupPriority") = 0
+  } Catch { }
   Do tInstaller.PopNS()
   If $$$ISERR(tSC) Throw ##class(%Installer.Exception).CreateFromStatus(tSC)
   Quit $$$OK
