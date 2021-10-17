@@ -21,6 +21,8 @@ Parameter MoneyProduction = "Oliver.Money.Production";
 
 Parameter MoneyService = "MoneyService";
 
+Parameter ProductionManager = "/prodmgr";
+
 Parameter RecordMap = "Oliver.Riches";
 
 ClassMethod AddOperation() As %Status
@@ -30,7 +32,7 @@ ClassMethod AddOperation() As %Status
 	Set pType = "POST"
 	Set tItem = ..#MoneyOperation
 	Set tProduction = ..#MoneyProduction
-	Set pURL = "/production/items/"_tProduction_"/"_tItem
+	Set pURL = ..#ProductionManager_"/items/"_tProduction_"/"_tItem
 	Set tSC = ..MakeDataAddOperation(.pStream)
 	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.obj,pType,pStream)
 	Set tSC = ..GetItemSettings(tItem)
@@ -46,7 +48,7 @@ ClassMethod AddProcess() As %Status
 	Set pType = "POST"
 	Set tItem = ..#MoneyProcess
 	Set tProduction = ..#MoneyProduction
-	Set pURL = "/production/items/"_tProduction_"/"_tItem
+	Set pURL = ..#ProductionManager_"/items/"_tProduction_"/"_tItem
 	Set tSC = ..MakeDataAddProcess(.pStream)
 	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.obj,pType,pStream)
 	Set tSC = ..GetItemSettings(tItem)
@@ -60,7 +62,7 @@ ClassMethod AddService() As %Status
 	Set pType = "POST"
 	Set tItem = ..#MoneyService
 	Set tProduction = ..#MoneyProduction
-	Set pURL = "/production/items/"_tProduction_"/"_tItem
+	Set pURL = ..#ProductionManager_"/items/"_tProduction_"/"_tItem
 	Set tSC = ..MakeDataAddService(.pStream)
 	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.obj,pType,pStream)
 	Set tSC = ..GetItemSettings(tItem)
@@ -75,7 +77,7 @@ ClassMethod CreateMoney() As %Status
 	Set pIris = "127.0.0.1:52773"
 	Set pType = "POST"
 	Set tProduction = ..#MoneyProduction
-	Set pURL = "/production/productions/"_tProduction
+	Set pURL = ..#ProductionManager_"/productions/"_tProduction
 	Set tSC = ..MakeData(.pStream)
 	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.obj,pType,pStream)
 	Set tItem = ..#MoneyService
@@ -101,9 +103,9 @@ ClassMethod Exists() As %Boolean
 	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - Exists")
 	Set pDEBUG = 1
 	Set pIris = "127.0.0.1:52773"
-	Set pURL = "/production/productions"
+	Set pURL = ..#ProductionManager_"/productions"
 	Set tProduction = ..#MoneyProduction
-	Set pURL = "/production/status/"_tProduction
+	Set pURL = ..#ProductionManager_"/status/"_tProduction
 	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.obj)
 	If $$$ISERR(tSC) Do:pDEBUG ##class(Oliver.Util).DebugStatus(tSC)
 	If $$$ISOK(tSC) {
@@ -162,7 +164,7 @@ ClassMethod GetItemSettings(
 	Set pIris = "127.0.0.1:52773"
 	Set pType = "GET"
 	Set tProduction = ..#MoneyProduction
-	Set pURL = "/production/items/"_tProduction_"/"_pItem
+	Set pURL = ..#ProductionManager_"/items/"_tProduction_"/"_pItem
 	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.pResponseData,pType,$Get(pStream))
 	Quit tSC
 }
@@ -342,7 +344,7 @@ ClassMethod PutItemSettings(
 	Set pIris = "127.0.0.1:52773"
 	Set pType = "PUT"
 	Set tProduction = ..#MoneyProduction
-	Set pURL = "/production/items/"_tProduction_"/"_pItem
+	Set pURL = ..#ProductionManager_"/items/"_tProduction_"/"_pItem
 	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.obj,pType,$Get(pStream))
 	Quit tSC
 }
