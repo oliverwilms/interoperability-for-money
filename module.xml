@@ -3,8 +3,8 @@
   <Document name="interoperability-for-money.ZPM">
     <Module>
       <Name>interoperability-for-money</Name>
-      <Description>A simple IRIS interoperability application</Description>
-      <Version>0.0.1</Version>
+      <Description>IRIS interoperability application</Description>
+      <Version>0.0.2</Version>
       <Packaging>module</Packaging>
       <Dependencies>
         <ModuleReference>
@@ -15,12 +15,11 @@
       <SourcesRoot>src</SourcesRoot>
       <Resource Name="Ens.Config.DefaultSettings.ESD"/>
       <Resource Name="TestLookupTable.LUT"/>
-      <Resource Name="dc.Reddit.PKG"/>
-      <Resource Name="dc.Demo.PKG"/>
+      <Resource Name="Oliver.PKG"/>
       <SystemRequirements Version=">=2020.1" Interoperability="enabled" />
       <Default Name="dbrole" Value="%DB_IRISAPP" /> 
       <CSPApplication 
-        Url="/production"
+        Url="/prodmgr"
         Recurse="1"
         MatchRoles=":{$dbrole}"
         PasswordAuthEnabled="1"
