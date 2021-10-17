@@ -34,7 +34,7 @@ ClassMethod CreateWebAppREST(pVars, pLogLevel, tInstaller) As %Status
   } Else {
     Set cspProperties("AutheEnabled") = $$$AutheCache // Password
   }
-  Set cspName = "/production"
+  Set cspName = "/prodmgr"
   Set cspProperties("NameSpace") = $Get(Namespace,"IRISAPP")
   Set cspProperties("Enabled") = 1
   Set cspProperties("DeepSeeEnabled") = 1
