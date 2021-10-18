@@ -39,3 +39,6 @@ SELECT COUNT(*) FROM RICHES.TRANSACT
 Reset table before processing a new file:
 
 DELETE RICHES.TRANSACT
+
+
+[Read more](https://community.intersystems.com/post/interoperability-recordmap-csv-wizard-and-money)
