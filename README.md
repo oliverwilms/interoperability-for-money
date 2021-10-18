@@ -41,4 +41,5 @@ Reset table before processing a new file:
 DELETE RICHES.TRANSACT
 
 
-[Read more](https://community.intersystems.com/post/interoperability-recordmap-csv-wizard-and-money)
+
+[Interoperability, RecordMap CSV Wizard, and Money](https://community.intersystems.com/post/interoperability-recordmap-csv-wizard-and-money)
