@@ -30,7 +30,9 @@ Navigate to interoperability-for-money directory and start the application using
 $ cd interoperability-for-money
 $ docker-compose up -d
 ```
-There are two containers defined. Interoperability container portal can be found at http://localhost:52795/csp/sys/UtilHome.csp. Analytics container can be found at http://localhost:32792/csp/sys/UtilHome.csp.
+There are two containers defined. Interoperability container portal can be found at http://localhost:52795/csp/sys/UtilHome.csp. 
+
+Analytics container can be found at http://localhost:32792/csp/sys/UtilHome.csp. Please note the password for _SYSTEM is abc123.
 
 Count Transactions in analytics container:
 
