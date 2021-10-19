@@ -10,7 +10,6 @@ zpm "install interoperability-for-money"
 ```
 then open http://localhost:52795/csp/sys/UtilHome.csp
 
-
 ### Docker
 The repo is dockerised so you can clone/git pull the repo into any local directory
 
@@ -31,6 +30,12 @@ $ cd interoperability-for-money
 $ docker-compose up -d
 ```
 There are two containers defined. Interoperability container portal can be found at http://localhost:52795/csp/sys/UtilHome.csp. 
+
+If you are prompted to login, enter _SYSTEM and SYS
+
+![screenshot](https://github.com/oliverwilms/bilder/blob/main/Interoperability_ProductionConfiguration.PNG)
+
+The Production has a File Service that reads any file in data directory. I included a sample file.
 
 Analytics container can be found at http://localhost:32792/csp/sys/UtilHome.csp. Please note the password for _SYSTEM is abc123.
 
