@@ -39,14 +39,10 @@ The Production has a File Service that reads any file in data directory. I inclu
 
 Analytics container can be found at http://localhost:32792/csp/sys/UtilHome.csp. Please note the password for _SYSTEM is abc123.
 
-Count Transactions in analytics container:
+![screenshot](https://github.com/oliverwilms/bilder/blob/main/Analytics_SelectCount.PNG)
 
-SELECT COUNT(*) FROM RICHES.TRANSACT
+You can count the number of transaction in Analytics database by executing SELECT COUNT(*) FROM RICHES.TRANSACT.
 
-Reset table before processing a new file:
+Reset table to start fresh by executing DELETE RICHES.TRANSACT
 
-DELETE RICHES.TRANSACT
-
-
-
-[Interoperability, RecordMap CSV Wizard, and Money](https://community.intersystems.com/post/interoperability-recordmap-csv-wizard-and-money)
+Read more about [Interoperability, RecordMap CSV Wizard, and Money](https://community.intersystems.com/post/interoperability-recordmap-csv-wizard-and-money)
