@@ -43,6 +43,6 @@ Analytics container can be found at http://localhost:32792/csp/sys/UtilHome.csp.
 
 You can count the number of transaction in Analytics database by executing SELECT COUNT(*) FROM RICHES.TRANSACT.
 
-Reset table to start fresh by executing DELETE RICHES.TRANSACT
+Reset table to start fresh by executing query DELETE RICHES.TRANSACT
 
 Read more about [Interoperability, RecordMap CSV Wizard, and Money](https://community.intersystems.com/post/interoperability-recordmap-csv-wizard-and-money)
