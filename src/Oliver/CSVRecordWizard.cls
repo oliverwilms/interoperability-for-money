@@ -4,10 +4,8 @@ Class Oliver.CSVRecordWizard Extends EnsPortal.CSVRecordWizard
 /// pCharEncoding = "unicodefeff"  --> "UnicodeBig": $char(254,255)
 ClassMethod DetectBOM(pFilename As %String) As %String
 {
-	New %recTerm,%sep,%quoteChar
 	Try {
 		Set tReadStr = ""
-		Set tRecTerm = ""
 		Set tStatus = $$$OK
 		Set tIO = ##class(%IO.FileStream).%New()
 		Do tIO.Open(pFilename, "R",,"RAW",.tStatus)
@@ -28,7 +26,6 @@ ClassMethod DetectBOM(pFilename As %String) As %String
 /// Record Terminator - CRLF, CR, LF
 ClassMethod DetectRecTerm(pFilename As %String) As %String
 {
-	New %recTerm,%sep,%quoteChar
 	Try {
 		Set tReadStr = ""
 		Set tRecTerm = ""
@@ -38,7 +35,6 @@ ClassMethod DetectRecTerm(pFilename As %String) As %String
 		If $$$ISERR(tStatus) Quit
 		For {
 			Set tReadStr = tIO.Read(1,,.tStatus)
-			Set tASCII = $ASCII(tReadStr)
 			If $$$ISERR(tStatus) Quit
 			If ($ASCII(tReadStr) '= 10),($ASCII(tReadStr) '= 13) {
 				If (tRecTerm '= "") Quit
@@ -54,7 +50,15 @@ ClassMethod DetectRecTerm(pFilename As %String) As %String
 }
 
 /// Quoted header records did not process before code change on 10/3/2021 - OTW 
-ClassMethod ProcessCSVFile(pFilename As %String, pRecordMapName As %String, pSep As %String = ",", pQuoteChar As %String = """", pHasHeaderRow As %Boolean = 0, pRecTerm As %String = "\x0d\x0a", pCharEncoding As %String = "UTF-8", pKeepSQLCols As %Boolean = 1) As %String [ Internal, ZenMethod ]
+ClassMethod ProcessCSVFile(
+	pFilename As %String,
+	pRecordMapName As %String,
+	pSep As %String = ",",
+	pQuoteChar As %String = """",
+	pHasHeaderRow As %Boolean = 0,
+	pRecTerm As %String = "\x0d\x0a",
+	pCharEncoding As %String = "UTF-8",
+	pKeepSQLCols As %Boolean = 1) As %String [ Internal, ZenMethod ]
 {
 	New %recTerm,%sep,%quoteChar
 	Try {
@@ -167,7 +171,15 @@ ClassMethod ProcessCSVFile(pFilename As %String, pRecordMapName As %String, pSep
 }
 
 /// pHasHeaderRow defaults to 1 - Oliver Wilms
-ClassMethod Test(pFilename As %String, pRecordMapName As %String, pSep As %String = ",", pQuoteChar As %String = """", pHasHeaderRow As %Boolean = 1, pRecTerm As %String = "\x0d\x0a", pCharEncoding As %String = "UTF-8", pKeepSQLCols As %Boolean = 1) As %String
+ClassMethod Test(
+	pFilename As %String,
+	pRecordMapName As %String,
+	pSep As %String = ",",
+	pQuoteChar As %String = """",
+	pHasHeaderRow As %Boolean = 1,
+	pRecTerm As %String = "\x0d\x0a",
+	pCharEncoding As %String = "UTF-8",
+	pKeepSQLCols As %Boolean = 1) As %String
 {
 	If ($Get(pFilename) = "") Set pFilename = "/opt/irisapp/iris-for-money-25-Sep-2021 22-26.csv"
 	If ($Get(pRecordMapName) = "") Set pRecordMapName = "Oliver.Riches"
@@ -178,7 +190,7 @@ ClassMethod Test(pFilename As %String, pRecordMapName As %String, pSep As %Strin
 	If (tRecTerm = $CHAR(10)) Set pRecTerm = "\x0a"
 	If (tRecTerm = $CHAR(13)) Set pRecTerm = "\x0d"
 	If (tRecTerm = $CHAR(13,10)) Set pRecTerm = "\x0d\x0a"
-	Set tString = ..ProcessCSVFile(pFilename,pRecordMapName,pSep,pQuoteChar,pHasHeaderRow,pRecTerm,pCharEncoding)
+	Set tString = ..ProcessCSVFile(pFilename,pRecordMapName,pSep,pQuoteChar,pHasHeaderRow,pRecTerm,pCharEncoding,pKeepSQLCols)
 	Write tString,!
 	Quit tString
 }
