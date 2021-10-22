@@ -140,10 +140,7 @@ ClassMethod ExistsItem(pItem As %String = "") As %Boolean
 	If $$$ISERR(tSC) Do:..#DEBUG ##class(Oliver.Util).DebugStatus(tSC)
 	If $$$ISOK(tSC) {
 		Try {
-			Set pMessage = obj.message
 			Set pName = obj.name
-			Set pStatus = obj.status
-			Set pType = obj.type
 		}
 		Catch {
 			Set tSC = $$$ERROR($$$GeneralError,"JSON error")
