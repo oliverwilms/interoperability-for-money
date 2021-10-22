@@ -66,7 +66,7 @@ ClassMethod CallRESTapi(
 		// Request body 
 		Try {
 			Set tSC = tRequest.EntityBody.CopyFrom(pStream)
-			If $$$ISERR(tSC) Do ##class(Feeder.Util).DebugStatus(tSC)
+			If $$$ISERR(tSC) Do ..DebugStatus(tSC)
 		} Catch {
 		}
 
@@ -147,13 +147,6 @@ ClassMethod CallRESTapi2(
 		}
 	}
 	Quit tSC
-	#define maxRESTapiErr 3
-	#define maxRetries 2
-	#define timeout 3
-	Do ..DebugTEST("Oliver.Util - CallRESTapi")
-	Do ..DebugTEST("pIris = "_$Get(pIris))
-	Do ..DebugTEST("pUrl = "_$Get(pUrl))
-	Set myUnitTest = $Get(^myUnitTests)
 }
 
 ClassMethod ExecuteQueryOneValue(
@@ -260,6 +253,8 @@ ClassMethod FindFileWithExtension(
 
 ClassMethod GetPass(pIris As %String) As %String
 {
+	Set pDEBUG = 0
+	Do:pDEBUG ..DebugTEST("pIris = "_$Get(pIris))
 	Set tPass = "SYS"
 	Quit tPass
 }
@@ -303,7 +298,7 @@ ClassMethod Test() As %Status
 	Kill ^TESTunit
 	Set tSC = ..MakeCredential()
 	Set tSC = ..MakeRecordMap()
-	Set tExists = ##class(Oliver.Production.Config).Exists()
+	//Set tExists = ##class(Oliver.Production.Config).Exists()
 	//If tExists Quit $$$OK
 	Set tSC = ##class(Oliver.Production.Config).CreateMoney()
 	Quit tSC
