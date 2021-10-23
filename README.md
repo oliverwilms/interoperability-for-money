@@ -33,7 +33,7 @@ There are two containers defined. Interoperability container portal can be found
 
 If you are prompted to login, enter _SYSTEM and SYS
 
-![screenshot](https://github.com/oliverwilms/bilder/blob/main/Interoperability_ProductionConfiguration.PNG)
+![screenshot](https://github.com/oliverwilms/bilder/blob/main/Interoperability_Workflow.JPG)
 
 The Production has a File Service that reads any file in data directory. I included a sample file.
 
