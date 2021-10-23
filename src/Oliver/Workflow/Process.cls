@@ -3,7 +3,7 @@ Class Oliver.Workflow.Process Extends Ens.BusinessProcessBPL
 
 XData BPL
 {
-<process request='Demo.Workflow.ProblemReport'
+<process request='Oliver.Workflow.Request'
          response='Ens.Response' >
   <context>
     <property name='Resolved' type='%Boolean' initialexpression='0' />
