@@ -25,6 +25,10 @@ Parameter ProductionManager = "/prodmgr";
 
 Parameter RecordMap = "Oliver.Riches";
 
+Parameter Workflow = 1;
+
+Parameter WorkflowRole = "Development";
+
 ClassMethod AddOperation() As %Status
 {
 	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - AddOperation")
@@ -71,6 +75,46 @@ ClassMethod AddService() As %Status
 	Quit tSC
 }
 
+ClassMethod AddWorkflow() As %Status
+{
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - AddWorkflow")
+	Set tSC = ..AddWorkflowProcess()
+	Set tSC = ..AddWorkflowOperation()
+	Quit tSC
+}
+
+ClassMethod AddWorkflowOperation() As %Status
+{
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - AddWorkflowOperation")
+	Set pIris = "127.0.0.1:52773"
+	Set pType = "POST"
+	Set tItem = ..#WorkflowRole
+	Set tProduction = ..#MoneyProduction
+	Set pURL = ..#ProductionManager_"/items/"_tProduction_"/"_tItem
+	Set tClassName = "EnsLib.Workflow.Operation"
+	Set tSC = ..MakeDataAddItem(.pStream,tClassName)
+	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.obj,pType,pStream)
+	Set tSC = ..GetItemSettings(tItem)
+	Set tSC = ..MakeDataPutWorkflowOperation(.pStream)
+	Set tSC = ..PutItemSettings(tItem,.pStream)
+	Quit tSC
+}
+
+ClassMethod AddWorkflowProcess() As %Status
+{
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - AddWorkflowProcess")
+	Set pIris = "127.0.0.1:52773"
+	Set pType = "POST"
+	Set tItem = "Workflow"
+	Set tProduction = ..#MoneyProduction
+	Set pURL = ..#ProductionManager_"/items/"_tProduction_"/"_tItem
+	Set tClassName = "Oliver.Workflow.Process"
+	Set tSC = ..MakeDataAddItem(.pStream,tClassName)
+	Set tSC = ##class(Oliver.Util).CallRESTapi(pIris,pURL,.obj,pType,pStream)
+	Set tSC = ..GetItemSettings(tItem)
+	Quit tSC
+}
+
 ClassMethod CreateMoney() As %Status
 {
 	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - CreateMoney")
@@ -94,6 +138,9 @@ ClassMethod CreateMoney() As %Status
 	Set tExists = ..ExistsItem(tItem)
 	If (tExists = 0) {
 		Set tSC = ..AddOperation()
+	}
+	If ..#Workflow {
+		Set tSC = ..AddWorkflow()
 	}
 	Quit tSC
 }
@@ -264,14 +311,6 @@ ClassMethod MakeDataPutOperation(ByRef pData As %Stream.FileCharacter) As %Statu
 ClassMethod MakeDataPutService(ByRef pData As %Stream.FileCharacter) As %Status
 {
 	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - MakeDataPutService")
-	Set comma = ","
-	Set tSC = $$$OK
-	Set pData = ##class(%Stream.FileCharacter).%New()
-	Set tSC = pData.WriteLine("{")
-	Set tSC = pData.WriteLine(..MakeQLineNumber("enabled",1)_comma)
-	Set tSC = pData.WriteLine(..MakeQLineNumber("pool_size",1)_comma)
-	Set tSC = pData.WriteLine(..MakeQLineText("class_name","EnsLib.RecordMap.Service.FileService"))
-	Set tSC = pData.WriteLine("}")
 
 	Set comma = ","
 	Set tSC = $$$OK
@@ -294,6 +333,25 @@ ClassMethod MakeDataPutService(ByRef pData As %Stream.FileCharacter) As %Status
 	Set tSC = pData.WriteLine(..MakeQLineText("name","TargetConfigNames")_comma)
 	Set tSC = pData.WriteLine(..MakeQLineText("target","Host")_comma)
 	Set tSC = pData.WriteLine(..MakeQLineText("value",..#MoneyProcess))
+	Set tSC = pData.WriteLine("}]}")
+	Quit tSC
+}
+
+ClassMethod MakeDataPutWorkflowOperation(ByRef pData As %Stream.FileCharacter) As %Status
+{
+	Do:..#DEBUG ##class(Oliver.Util).DebugTEST("Oliver.Production.Config - MakeDataPutWorkflowOperation")
+
+	Set comma = ","
+	Set tSC = $$$OK
+	Set pData = ##class(%Stream.FileCharacter).%New()
+	Set tSC = pData.WriteLine("{")
+	Set tSC = pData.WriteLine(..MakeQLineNumber("pool_size",1)_comma)
+	Set tSC = pData.WriteLine(..MakeQLineNumber("log_trace_events",1)_comma)
+	Set tSC = pData.WriteLine(..MakeQArrayOpen("settings"))
+	Set tSC = pData.WriteLine("{")
+	Set tSC = pData.WriteLine(..MakeQLineText("name","AutoCreateRole")_comma)
+	Set tSC = pData.WriteLine(..MakeQLineText("target","Host")_comma)
+	Set tSC = pData.WriteLine(..MakeQLineText("value",1))
 	Set tSC = pData.WriteLine("}]}")
 	Quit tSC
 }
