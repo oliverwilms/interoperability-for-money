@@ -1,5 +1,5 @@
 # interoperability-for-money
-This is my InterSystems IRIS Interoperability solution for InterSystems Interoperability Contest 2021.
+This is my InterSystems IRIS Interoperability solution for InterSystems Interoperability Contest 2021. This is also my first time using Workflow.
 
 ## Installation 
 
@@ -46,3 +46,5 @@ You can count the number of transaction in Analytics database by executing SELEC
 Reset table to start fresh by executing query DELETE RICHES.TRANSACT
 
 Read more about [Interoperability, RecordMap CSV Wizard, and Money](https://community.intersystems.com/post/interoperability-recordmap-csv-wizard-and-money)
+
+I added Worflow. I edited my first BPL Process to send certain RecordMap records to Workflow process based on the Status field in each record. I added a Worflow Operation. I was happy to find a setting to Auto Create Role for me.
