@@ -1,4 +1,4 @@
-Class Oliver.Workflow.Process Extends Ens.BusinessProcessBPL 
+Class Oliver.Workflow.Process Extends Ens.BusinessProcessBPL
 {
 
 XData BPL
@@ -20,7 +20,7 @@ XData BPL
       </annotation>
 
       <call name='Notify Development'
-            target='Demo-Development'
+            target='Development'
             async='1' >
         <annotation>
           Send the problem report to Development for review.
@@ -30,10 +30,10 @@ XData BPL
                   value='"Corrected,Ignored"'
                   action='set' />
           <assign property='callrequest.%Subject'
-                  value='"Problem reported by "_request.ReportedBy'
+                  value='"Problem reported by Oliver.Workflow.Process"'
                   action='set' />
           <assign property='callrequest.%Message'
-                  value='request.Problem'
+                  value='request.Status_" "_request.Account'
                   action='set' />
           <assign property='callrequest.%FormFields'
                   value='"Comments"'
@@ -103,4 +103,10 @@ XData BPL
   </sequence>
 </process>
 }
+
+Storage Default
+{
+<Type>%Storage.Persistent</Type>
+}
+
 }
